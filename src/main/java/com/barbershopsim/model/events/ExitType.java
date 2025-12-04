@@ -1,6 +1,6 @@
 package com.barbershopsim.model.events;
 
-public enum CustomerExitType {
+public enum ExitType {
     SATISFIED("satisfied"),
     UNFULFILLED("unfulfilled"),
     DISAPPOINTED("disappointed"),
@@ -9,7 +9,7 @@ public enum CustomerExitType {
 
     public final String text;
 
-    CustomerExitType(String text) {
+    ExitType(String text) {
         this.text = text;
     }
 }

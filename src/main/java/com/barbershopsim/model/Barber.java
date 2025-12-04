@@ -6,8 +6,9 @@ public enum Barber {
     C("Charlie"),
     D("Dave"),
     E("Eve"),
-    M("Mallory"),
-    T("Trent");
+    F("Frank"),
+    G("Grace"),
+    H("Hector");
 
     public final String name;
 

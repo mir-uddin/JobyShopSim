@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.barbershopsim'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.google.guava:guava:33.5.0-jre"
+}
+
+test {
+    useJUnitPlatform()
+}
