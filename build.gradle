@@ -1,9 +1,14 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'com.barbershopsim'
 version = '1.0.0'
+
+application {
+    mainClass = 'com.barbershopsim.Main'
+}
 
 repositories {
     mavenCentral()
