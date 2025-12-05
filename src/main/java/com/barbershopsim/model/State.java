@@ -163,6 +163,14 @@ public class State {
             return null;
         }
 
+        public List<Chair> availableForShiftChange() {
+            List<Chair> res = new ArrayList<>();
+            for (Chair chair : chairs) {
+                if (chair.customer() == -1) res.add(chair);
+            }
+            return res;
+        }
+
         public List<Chair> endedCuts(int time) {
             List<Chair> res = new ArrayList<>();
             for (Chair chair : chairs) {

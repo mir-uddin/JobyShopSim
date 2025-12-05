@@ -6,6 +6,7 @@ import com.barbershopsim.model.State;
 import com.barbershopsim.model.events.CustomEvent;
 import com.barbershopsim.model.events.ShopEvent;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,11 +26,11 @@ public class EventGenerator implements EventSource {
      * 1 real second == 10,000 simulated seconds.
      */
     private static final int TIMESCALE_FACTOR = 10_000;
-    private static int time = State.START_TIME;
     /**
      * 60 seconds.
      */
     private static final int CLOCK_TICK = 60;
+    private static int time = State.START_TIME;
     //    private static int clockTick = 0;
     private static int customer = 1;
 
@@ -61,33 +62,25 @@ public class EventGenerator implements EventSource {
             } else if (time == State.START_TIME + State.SHIFT_DURATION) {    // Shift change
                 Set<Barber> wrappingUpWork = shiftInfo.wrappingUpWork();
                 wrappingUpWork.addAll(shiftInfo.working());
-                int count = 0;
-                State.Chair chair = chairs.availableForCustomer();
-                while (chair != null && count < 4) {
+                List<State.Chair> available = chairs.availableForShiftChange();
+                for (State.Chair chair : available) {
                     Barber barber = chair.barber();
                     busManager.post(new ShopEvent.ShiftEnd(time, barber));
                     wrappingUpWork.remove(barber);
 
                     Barber nextBarber = shiftInfo.notWorking().peek();
                     busManager.post(new ShopEvent.ShiftStart(time, nextBarber));
-
-                    chair = chairs.availableForCustomer();
-                    count++;
                 }
             } else if (time == State.END_TIME) {  // EOD
                 busManager.post(new ShopEvent.ShopClose(time, State.SHOP_NAME));
 
                 Set<Barber> wrappingUpWork = shiftInfo.wrappingUpWork();
                 wrappingUpWork.addAll(shiftInfo.working());
-                int count = 0;
-                State.Chair chair = chairs.availableForCustomer();
-                while (chair != null && count < 4) {
+                List<State.Chair> available = chairs.availableForShiftChange();
+                for (State.Chair chair : available) {
                     Barber barber = chair.barber();
                     busManager.post(new ShopEvent.ShiftEnd(time, barber));
                     wrappingUpWork.remove(barber);
-
-                    chair = chairs.availableForCustomer();
-                    count++;
                 }
             } else {    // time > END_TIME
                 // no-op
