@@ -104,7 +104,7 @@ class EventProcessor implements EventListener {
             if (chair != null) {
                 waitingArea.removePriorityCustomer();
                 chair.setCustomer(customer);
-                chair.setEndTime(startTime + random.nextInt(State.CUT_DURATION_MIN_INCL, State.CUT_DURATION_MAX_EXCL) * 60);
+                chair.setEndTime(startTime + random.nextInt(State.CUT_DURATION_MIN, State.CUT_DURATION_MAX + 1 /*exclusive*/) * 60);
                 busManager.post(new ShopEvent.CutStart(startTime, chair.barber(), customer));
             }
         }

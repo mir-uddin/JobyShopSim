@@ -31,7 +31,6 @@ public class EventGenerator implements EventSource {
      */
     private static final int CLOCK_TICK = 60;
     private static int time = State.START_TIME;
-    //    private static int clockTick = 0;
     private static int customer = 1;
 
     private static int toScaledMillis(int seconds) {
@@ -47,6 +46,13 @@ public class EventGenerator implements EventSource {
 
     public static void end() {
         exec.shutdown();
+    }
+
+    private static void scheduleClock() {
+        exec.scheduleAtFixedRate(() -> {
+            busManager.post(new CustomEvent.ClockTick(time));
+            time += CLOCK_TICK;
+        }, toScaledMillis(CLOCK_TICK), toScaledMillis(CLOCK_TICK), TimeUnit.MILLISECONDS);
     }
 
     private static void scheduleShifts() {
@@ -92,12 +98,5 @@ public class EventGenerator implements EventSource {
         exec.scheduleAtFixedRate(() -> {
             busManager.post(new ShopEvent.CustomerEnter(time, customer++));
         }, 0, toScaledMillis(State.CUSTOMER_FREQUENCY), TimeUnit.MILLISECONDS);
-    }
-
-    private static void scheduleClock() {
-        exec.scheduleAtFixedRate(() -> {
-            busManager.post(new CustomEvent.ClockTick(time));
-            time += CLOCK_TICK;
-        }, toScaledMillis(CLOCK_TICK), toScaledMillis(CLOCK_TICK), TimeUnit.MILLISECONDS);
     }
 }

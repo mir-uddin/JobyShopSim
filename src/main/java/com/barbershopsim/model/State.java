@@ -27,11 +27,11 @@ public class State {
     /**
      * 20 minutes (in minutes, not seconds).
      */
-    public static final int CUT_DURATION_MIN_INCL = 20;
+    public static final int CUT_DURATION_MIN = 20;
     /**
      * 40 minutes (in minutes, not seconds).
      */
-    public static final int CUT_DURATION_MAX_EXCL = 41;
+    public static final int CUT_DURATION_MAX = 40;
     private static State instance;
     private final Chairs chairs = new Chairs();
     private final WaitingArea waitingArea = new WaitingArea();
@@ -54,55 +54,6 @@ public class State {
 
     public ShiftInfo shiftInfo() {
         return shiftInfo;
-    }
-
-    public static class ShiftInfo {
-        private final Set<Barber> working = new HashSet<>();
-        private final Set<Barber> wrappingUpWork = new HashSet<>();
-        private final Queue<Barber> notWorking = new ArrayDeque<>(Arrays.asList(Barber.values()));
-
-        public Set<Barber> working() {
-            return working;
-        }
-
-        public Set<Barber> wrappingUpWork() {
-            return wrappingUpWork;
-        }
-
-        public Queue<Barber> notWorking() {
-            return notWorking;
-        }
-    }
-
-    public static class WaitingArea {
-        private final PriorityQueue<WaitingState> queue = new PriorityQueue<>(Comparator.comparing(a -> a.customer() + a.startTime()));
-
-        public boolean addCustomer(int customer, int startTime) {
-            if (queue.size() == 4) return false;
-            queue.add(new WaitingState(customer, startTime));
-            return true;
-        }
-
-        public int getPriorityCustomer() {
-            if (queue.isEmpty()) return -1;
-            return queue.peek().customer;
-        }
-
-        public int getPriorityCustomerStartTime() {
-            if (queue.isEmpty()) return -1;
-            return queue.peek().startTime;
-        }
-
-        public int removePriorityCustomer() {
-            return queue.remove().customer;
-        }
-
-        public boolean isEmpty() {
-            return queue.isEmpty();
-        }
-
-        private record WaitingState(int customer, int startTime) {
-        }
     }
 
     public static final class Chair {
@@ -149,6 +100,9 @@ public class State {
                 new Chair(null, -1, -1)
         );
 
+        /**
+         * @param barber - if null, returns the first Chair that isn't assigned to a barber.
+         */
         public Chair assignedToBarber(Barber barber) {
             for (Chair chair : chairs) {
                 if (chair.barber() == barber) return chair;
@@ -177,6 +131,55 @@ public class State {
                 if (chair.endTime() > -1 && time >= chair.endTime()) res.add(chair);
             }
             return res;
+        }
+    }
+
+    public static class WaitingArea {
+        private final PriorityQueue<WaitingState> queue = new PriorityQueue<>(Comparator.comparing(a -> a.customer() + a.startTime()));
+
+        public boolean addCustomer(int customer, int startTime) {
+            if (queue.size() == 4) return false;
+            queue.add(new WaitingState(customer, startTime));
+            return true;
+        }
+
+        public int getPriorityCustomer() {
+            if (queue.isEmpty()) return -1;
+            return queue.peek().customer;
+        }
+
+        public int getPriorityCustomerStartTime() {
+            if (queue.isEmpty()) return -1;
+            return queue.peek().startTime;
+        }
+
+        public int removePriorityCustomer() {
+            return queue.remove().customer;
+        }
+
+        public boolean isEmpty() {
+            return queue.isEmpty();
+        }
+
+        private record WaitingState(int customer, int startTime) {
+        }
+    }
+
+    public static class ShiftInfo {
+        private final Set<Barber> working = new HashSet<>();
+        private final Set<Barber> wrappingUpWork = new HashSet<>();
+        private final Queue<Barber> notWorking = new ArrayDeque<>(Arrays.asList(Barber.values()));
+
+        public Set<Barber> working() {
+            return working;
+        }
+
+        public Set<Barber> wrappingUpWork() {
+            return wrappingUpWork;
+        }
+
+        public Queue<Barber> notWorking() {
+            return notWorking;
         }
     }
 }
