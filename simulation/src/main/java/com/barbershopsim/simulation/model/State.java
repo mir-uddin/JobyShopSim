@@ -1,4 +1,4 @@
-package com.barbershopsim.model;
+package com.barbershopsim.simulation.model;
 
 import java.util.*;
 
@@ -32,17 +32,10 @@ public class State {
      * 40 minutes (in minutes, not seconds).
      */
     public static final int CUT_DURATION_MAX = 40;
-    private static State instance;
     private final Chairs chairs = new Chairs();
     private final WaitingArea waitingArea = new WaitingArea();
     private final ShiftInfo shiftInfo = new ShiftInfo();
     public boolean isShopOpen = false;
-
-    public static State getInstance() {
-        if (instance == null)
-            instance = new State();
-        return instance;
-    }
 
     public Chairs chairs() {
         return chairs;

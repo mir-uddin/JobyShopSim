@@ -1,12 +1,11 @@
-package com.barbershopsim.eventlistener;
+package com.barbershopsim.simulation.eventlistener;
 
-import com.barbershopsim.eventsource.EventGenerator;
-import com.barbershopsim.model.Barber;
-import com.barbershopsim.model.State;
-import com.barbershopsim.model.events.CustomEvent;
-import com.barbershopsim.model.events.Event;
-import com.barbershopsim.model.events.ExitType;
-import com.barbershopsim.model.events.ShopEvent;
+import com.barbershopsim.simulation.model.Barber;
+import com.barbershopsim.simulation.model.State;
+import com.barbershopsim.simulation.model.events.CustomEvent;
+import com.barbershopsim.simulation.model.events.Event;
+import com.barbershopsim.simulation.model.events.ExitType;
+import com.barbershopsim.simulation.model.events.ShopEvent;
 import com.google.common.eventbus.Subscribe;
 
 import java.util.Random;
@@ -15,14 +14,22 @@ import java.util.Set;
 /**
  * Processes shop events and updates state accordingly.
  */
-class EventProcessor implements EventListener {
-    private static final BusManager busManager = BusManager.getInstance();
+public class EventProcessor implements EventListener {
     private static final Random random = new Random();
+    private final BusManager busManager;
     // State
-    private static final State state = State.getInstance();
-    private static final State.ShiftInfo shiftInfo = state.shiftInfo();
-    private final State.WaitingArea waitingArea = State.getInstance().waitingArea();
-    private final State.Chairs chairs = State.getInstance().chairs();
+    private final State state;
+    private final State.ShiftInfo shiftInfo;
+    private final State.WaitingArea waitingArea;
+    private final State.Chairs chairs;
+
+    public EventProcessor(State state, BusManager busManager) {
+        this.state = state;
+        shiftInfo = state.shiftInfo();
+        waitingArea = state.waitingArea();
+        chairs = state.chairs();
+        this.busManager = busManager;
+    }
 
     @Subscribe
     public void onEventProcess(Event event) {
@@ -62,8 +69,7 @@ class EventProcessor implements EventListener {
         }
 
         if (!state.isShopOpen && shiftInfo.working().isEmpty()) {
-            EventGenerator.end();
-            busManager.unregisterAll();
+            busManager.post(new CustomEvent.ProgramTermination());
         }
     }
 

@@ -1,4 +1,4 @@
-package com.barbershopsim.model;
+package com.barbershopsim.simulation.model;
 
 public enum Barber {
     A("Alice"),

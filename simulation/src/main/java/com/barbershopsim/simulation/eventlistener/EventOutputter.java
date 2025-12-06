@@ -1,6 +1,6 @@
-package com.barbershopsim.eventlistener;
+package com.barbershopsim.simulation.eventlistener;
 
-import com.barbershopsim.model.events.ShopEvent;
+import com.barbershopsim.simulation.model.events.ShopEvent;
 import com.google.common.eventbus.Subscribe;
 
 /**

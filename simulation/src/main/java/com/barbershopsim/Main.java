@@ -1,13 +1,11 @@
 package com.barbershopsim;
 
-import com.barbershopsim.eventlistener.BusManager;
-import com.barbershopsim.eventlistener.EventOutputter;
-import com.barbershopsim.eventsource.EventGenerator;
+import com.barbershopsim.simulation.eventlistener.EventOutputter;
+import com.barbershopsim.simulation.Simulation;
 
 public class Main {
 
     public static void main(String[] args) {
-        BusManager.getInstance().register(new EventOutputter());
-        EventGenerator.start();
+        new Simulation().start(new EventOutputter());
     }
 }

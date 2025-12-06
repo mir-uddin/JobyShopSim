@@ -1,10 +1,10 @@
-package com.barbershopsim.eventsource;
+package com.barbershopsim.simulation.eventsource;
 
-import com.barbershopsim.eventlistener.BusManager;
-import com.barbershopsim.model.Barber;
-import com.barbershopsim.model.State;
-import com.barbershopsim.model.events.CustomEvent;
-import com.barbershopsim.model.events.ShopEvent;
+import com.barbershopsim.simulation.eventlistener.BusManager;
+import com.barbershopsim.simulation.model.Barber;
+import com.barbershopsim.simulation.model.State;
+import com.barbershopsim.simulation.model.events.CustomEvent;
+import com.barbershopsim.simulation.model.events.ShopEvent;
 
 import java.util.List;
 import java.util.Set;
@@ -16,12 +16,7 @@ import java.util.concurrent.TimeUnit;
  * Generates simulated shop events.
  */
 public class EventGenerator implements EventSource {
-    private static final BusManager busManager = BusManager.getInstance();
-    // State
-    private static final State.Chairs chairs = State.getInstance().chairs();
-    private static final State.ShiftInfo shiftInfo = State.getInstance().shiftInfo();
     // Simulation
-    private static final ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
     /**
      * 1 real second == 10,000 simulated seconds.
      */
@@ -30,32 +25,44 @@ public class EventGenerator implements EventSource {
      * 60 seconds.
      */
     private static final int CLOCK_TICK = 60;
-    private static int time = State.START_TIME;
-    private static int customer = 1;
+    private final ScheduledExecutorService exec;
+    private final BusManager busManager;
+    // State
+    private final State.Chairs chairs;
+    private final State.ShiftInfo shiftInfo;
+    private int time = State.START_TIME;
+    private int customer = 1;
+
+    public EventGenerator(State state, BusManager busManager) {
+        this.chairs = state.chairs();
+        this.shiftInfo = state.shiftInfo();
+        this.busManager = busManager;
+        this.exec = Executors.newSingleThreadScheduledExecutor();
+    }
 
     private static int toScaledMillis(int seconds) {
         return seconds * 1_000 / TIMESCALE_FACTOR;
     }
 
-    public static void start() {
+    public void start() {
         busManager.post(new ShopEvent.ShopOpen(time, State.SHOP_NAME));
         scheduleClock();
         scheduleShifts();
         scheduleTraffic();
     }
 
-    public static void end() {
+    public void end() {
         exec.shutdown();
     }
 
-    private static void scheduleClock() {
+    private void scheduleClock() {
         exec.scheduleAtFixedRate(() -> {
             busManager.post(new CustomEvent.ClockTick(time));
             time += CLOCK_TICK;
         }, toScaledMillis(CLOCK_TICK), toScaledMillis(CLOCK_TICK), TimeUnit.MILLISECONDS);
     }
 
-    private static void scheduleShifts() {
+    private void scheduleShifts() {
         exec.scheduleAtFixedRate(() -> {
             if (time == State.START_TIME) {
                 int count = 0;
@@ -94,7 +101,7 @@ public class EventGenerator implements EventSource {
         }, 0, toScaledMillis(State.SHIFT_DURATION), TimeUnit.MILLISECONDS);
     }
 
-    private static void scheduleTraffic() {
+    private void scheduleTraffic() {
         exec.scheduleAtFixedRate(() -> {
             busManager.post(new ShopEvent.CustomerEnter(time, customer++));
         }, 0, toScaledMillis(State.CUSTOMER_FREQUENCY), TimeUnit.MILLISECONDS);

@@ -1,4 +1,4 @@
-package com.barbershopsim.model.events;
+package com.barbershopsim.simulation.model.events;
 
 public enum ExitType {
     SATISFIED("satisfied"),

@@ -26,9 +26,14 @@ repositories {
 }
 
 dependencies {
-    implementation "com.google.guava:guava:33.5.0-jre"  // EventBus
+    api "com.google.guava:guava:33.5.0-jre"  // EventBus
 }
 
 test {
     useJUnitPlatform()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_23
+    targetCompatibility = JavaVersion.VERSION_23
 }

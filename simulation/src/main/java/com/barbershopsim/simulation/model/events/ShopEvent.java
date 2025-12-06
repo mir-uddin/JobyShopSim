@@ -1,6 +1,6 @@
-package com.barbershopsim.model.events;
+package com.barbershopsim.simulation.model.events;
 
-import com.barbershopsim.model.Barber;
+import com.barbershopsim.simulation.model.Barber;
 
 public interface ShopEvent extends Event {
 
