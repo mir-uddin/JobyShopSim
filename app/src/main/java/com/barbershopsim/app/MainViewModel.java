@@ -13,7 +13,7 @@ import com.google.common.eventbus.Subscribe;
 
 import java.util.List;
 
-import static com.barbershopsim.simulation.Utils.formatTime;
+import static com.barbershopsim.simulation.SimUtils.formatTime;
 
 public class MainViewModel extends ViewModel implements EventListener {
     /**
@@ -85,5 +85,13 @@ public class MainViewModel extends ViewModel implements EventListener {
     public void onEvent(CustomEvent.ProgramTermination event) {
         _customerEnter.postValue(null);
         _customerExit.postValue(null);
+    }
+
+    public String getShopName() {
+        return State.SHOP_NAME;
+    }
+
+    public String getTimescaleFactor() {
+        return "1 real second =" + String.format("%,d", TIMESCALE_FACTOR) + " simulated seconds";
     }
 }

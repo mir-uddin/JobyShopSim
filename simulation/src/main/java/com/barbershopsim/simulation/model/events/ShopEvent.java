@@ -2,7 +2,7 @@ package com.barbershopsim.simulation.model.events;
 
 import com.barbershopsim.simulation.model.Barber;
 
-import static com.barbershopsim.simulation.Utils.formatTime;
+import static com.barbershopsim.simulation.SimUtils.formatTime;
 
 public interface ShopEvent extends Event {
 

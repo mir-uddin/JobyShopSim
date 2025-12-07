@@ -49,6 +49,9 @@ public class MainFragment extends Fragment {
         barberCustomerViews =
                 List.of(binding.barberCustomerOne.getRoot(), binding.barberCustomerTwo.getRoot(), binding.barberCustomerThree.getRoot(), binding.barberCustomerFour.getRoot());
 
+        binding.shopName.setText(mViewModel.getShopName());
+        binding.timescaleFactor.setText(mViewModel.getTimescaleFactor());
+
         mViewModel.isShopOpen.observe(getViewLifecycleOwner(), isShopOpen -> {
             if (isShopOpen == true) {
                 binding.closedSign.setVisibility(View.INVISIBLE);

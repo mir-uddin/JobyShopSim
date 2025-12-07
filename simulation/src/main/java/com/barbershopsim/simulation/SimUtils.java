@@ -1,6 +1,6 @@
 package com.barbershopsim.simulation;
 
-public class Utils {
+public class SimUtils {
 
     public static String formatTime(int seconds) {
         int hours = (seconds / (60 * 60)) % 24;
