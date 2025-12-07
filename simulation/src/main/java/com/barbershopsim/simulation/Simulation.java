@@ -15,10 +15,10 @@ public class Simulation implements EventListener {
 
     private boolean ended = false;
 
-    public Simulation() {
+    public Simulation(int timescaleFactor) {
         busManager = new BusManager();
         State state = new State();
-        eventGenerator = new EventGenerator(state, busManager);
+        eventGenerator = new EventGenerator(state, busManager, timescaleFactor);
         eventProcessor = new EventProcessor(state, busManager);
 
         busManager.register(eventProcessor);

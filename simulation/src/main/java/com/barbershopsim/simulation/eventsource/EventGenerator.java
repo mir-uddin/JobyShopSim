@@ -18,13 +18,10 @@ import java.util.concurrent.TimeUnit;
 public class EventGenerator implements EventSource {
     // Simulation
     /**
-     * 1 real second == 10,000 simulated seconds.
-     */
-    private static final int TIMESCALE_FACTOR = 10_000;
-    /**
      * 60 seconds.
      */
     private static final int CLOCK_TICK = 60;
+    private final int timescaleFactor;
     private final ScheduledExecutorService exec;
     private final BusManager busManager;
     // State
@@ -33,15 +30,16 @@ public class EventGenerator implements EventSource {
     private int time = State.START_TIME;
     private int customer = 1;
 
-    public EventGenerator(State state, BusManager busManager) {
+    public EventGenerator(State state, BusManager busManager, int timescaleFactor) {
         this.chairs = state.chairs();
         this.shiftInfo = state.shiftInfo();
         this.busManager = busManager;
         this.exec = Executors.newSingleThreadScheduledExecutor();
+        this.timescaleFactor = timescaleFactor;
     }
 
-    private static int toScaledMillis(int seconds) {
-        return seconds * 1_000 / TIMESCALE_FACTOR;
+    private int toScaledMillis(int seconds) {
+        return seconds * 1_000 / timescaleFactor;
     }
 
     public void start() {
