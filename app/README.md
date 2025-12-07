@@ -6,15 +6,17 @@ A native Android application for the barber shop simulation.
 
 <table>
   <tr>
-    <td><img width="300" alt="screenshot-2025-12-07_18 36 30 29" src="https://github.com/user-attachments/assets/4c55a1bb-9f7e-41ac-9f5e-0f8a1e9abbb0" /></td>
+    <td><img width="250" src="https://github.com/user-attachments/assets/4c55a1bb-9f7e-41ac-9f5e-0f8a1e9abbb0" /></td>
+    <td><img width="250" src="https://github.com/user-attachments/assets/eb11705e-202f-432f-bf8f-aec41a042c74" />
+</td>
     <td>
 Legend:
       
   - Top left - RWB cuts - is the shop name
   - ↗️ - Incoming customer.
   - ↖️ - Outgoing customer.
-  - ◻️ - Customer id.
-  - 🟩 - Barber.
+  - ⬛️ - Customer id.
+  - 🟩 - Barber (8 possible: A through H)
   - ↺ - Restart.
 
   </td>
