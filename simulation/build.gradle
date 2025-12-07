@@ -1,0 +1,39 @@
+plugins {
+    id 'java-library'
+    id 'application'
+}
+
+group = 'com.barbershopsim'
+version = '1.0.0'
+
+application {
+    mainClass = 'com.barbershopsim.Main'
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api "com.google.guava:guava:33.5.0-jre"  // EventBus
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_23
+    targetCompatibility = JavaVersion.VERSION_23
+}

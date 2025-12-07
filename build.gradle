@@ -1,34 +1,16 @@
-plugins {
-    id 'java'
-    id 'application'
-}
-
-group = 'com.barbershopsim'
-version = '1.0.0'
-
-application {
-    mainClass = 'com.barbershopsim.Main'
-}
-
-jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    manifest {
-        attributes 'Main-Class': application.mainClass
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
     }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.12.3'
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation "com.google.guava:guava:33.5.0-jre"  // EventBus
-}
-
-test {
-    useJUnitPlatform()
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
