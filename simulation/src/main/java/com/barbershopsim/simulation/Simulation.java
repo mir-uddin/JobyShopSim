@@ -9,6 +9,7 @@ import com.barbershopsim.simulation.model.events.CustomEvent;
 import com.google.common.eventbus.Subscribe;
 
 public class Simulation implements EventListener {
+    private final State state;
     private final EventGenerator eventGenerator;
     private final EventProcessor eventProcessor;
     private final BusManager busManager;
@@ -17,7 +18,7 @@ public class Simulation implements EventListener {
 
     public Simulation(int timescaleFactor) {
         busManager = new BusManager();
-        State state = new State();
+        state = new State();
         eventGenerator = new EventGenerator(state, busManager, timescaleFactor);
         eventProcessor = new EventProcessor(state, busManager);
 
@@ -43,5 +44,9 @@ public class Simulation implements EventListener {
         ended = true;
         eventGenerator.end();
         busManager.unregisterAll();
+    }
+
+    public State getState() {
+        return state;
     }
 }

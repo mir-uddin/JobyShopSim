@@ -125,6 +125,10 @@ public class State {
             }
             return res;
         }
+
+        public List<Chair> list() {
+            return chairs;
+        }
     }
 
     public static class WaitingArea {
@@ -152,6 +156,10 @@ public class State {
 
         public boolean isEmpty() {
             return queue.isEmpty();
+        }
+
+        public List<Integer> customers() {
+            return queue.stream().map(waitingState -> waitingState.customer).toList();
         }
 
         private record WaitingState(int customer, int startTime) {

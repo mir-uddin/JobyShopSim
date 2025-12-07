@@ -2,13 +2,9 @@ package com.barbershopsim.simulation.model.events;
 
 import com.barbershopsim.simulation.model.Barber;
 
-public interface ShopEvent extends Event {
+import static com.barbershopsim.simulation.Utils.formatTime;
 
-    private static String formatTime(int seconds) {
-        int hours = (seconds / (60 * 60)) % 24;
-        int minutes = (seconds % (60 * 60)) / 60;
-        return "[" + String.format("%02d:%02d", hours, minutes) + "] ";
-    }
+public interface ShopEvent extends Event {
 
     record ShopOpen(int time, String name) implements ShopEvent {
         @Override

@@ -28,10 +28,15 @@ android {
         targetCompatibility JavaVersion.VERSION_23
         coreLibraryDesugaringEnabled true
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
     implementation project(":simulation")
+    implementation "com.google.android.flexbox:flexbox:3.0.0"
     implementation "androidx.appcompat:appcompat:1.7.1"
     implementation "androidx.constraintlayout:constraintlayout:2.2.1"
     implementation "androidx.lifecycle:lifecycle-livedata:2.10.0"
