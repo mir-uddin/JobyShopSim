@@ -33,39 +33,46 @@ public class EventProcessor implements EventListener {
 
     @Subscribe
     public void onEventProcess(Event event) {
-        if (event instanceof ShopEvent.ShopOpen) {
-            state.isShopOpen = true;
-        } else if (event instanceof ShopEvent.ShopClose(int time, _)) {
-            state.isShopOpen = false;
-            while (!waitingArea.isEmpty()) {
-                int customer = waitingArea.removePriorityCustomer();
-                busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.CURSING));
+        switch (event) {
+            case ShopEvent.ShopOpen _ -> state.isShopOpen = true;
+            case ShopEvent.ShopClose(int time, _) -> {
+                state.isShopOpen = false;
+                while (!waitingArea.isEmpty()) {
+                    int customer = waitingArea.removePriorityCustomer();
+                    busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.CURSING));
+                }
             }
-        } else if (event instanceof ShopEvent.ShiftStart(_, Barber barber)) {
-            State.Chair chair = chairs.assignedToBarber(null);
-            chair.setBarber(barber);
-            shiftInfo.notWorking().remove();
-            shiftInfo.working().add(barber);
-        } else if (event instanceof ShopEvent.ShiftEnd(_, Barber barber)) {
-            shiftInfo.notWorking().add(barber);
-            shiftInfo.working().remove(barber);
-            State.Chair chair = chairs.assignedToBarber(barber);
-            if (chair != null) {
-                chair.setBarber(null);
+            case ShopEvent.ShiftStart(_, Barber barber) -> {
+                State.Chair chair = chairs.assignedToBarber(null);
+                chair.setBarber(barber);
+                shiftInfo.notWorking().remove();
+                shiftInfo.working().add(barber);
             }
-        } else if (event instanceof ShopEvent.CustomerEnter(int time, int customer)) {
-            if (time >= State.END_TIME) {
-                busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.DISAPPOINTED));
-            } else if (!waitingArea.addCustomer(customer, time)) {
-                busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.UNFULFILLED));
+            case ShopEvent.ShiftEnd(_, Barber barber) -> {
+                shiftInfo.notWorking().add(barber);
+                shiftInfo.working().remove(barber);
+                State.Chair chair = chairs.assignedToBarber(barber);
+                if (chair != null) {
+                    chair.setBarber(null);
+                }
             }
-        } else if (event instanceof ShopEvent.CutEnd(int time, _, int customer)) {
-            busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.SATISFIED));
-        } else if (event instanceof CustomEvent.ClockTick(int time)) {
-            checkCutEnds(time);
-            busManager.post(new CustomEvent.AttemptHaircut(time));
-        } else if (event instanceof CustomEvent.AttemptHaircut(int time)) {
-            attemptHaircut(time);
+            case ShopEvent.CustomerEnter(int time, int customer) -> {
+                if (time >= State.END_TIME) {
+                    busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.DISAPPOINTED));
+                } else if (!waitingArea.addCustomer(customer, time)) {
+                    busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.UNFULFILLED));
+                }
+            }
+            case ShopEvent.CutEnd(int time, _, int customer) ->
+                    busManager.post(new ShopEvent.CustomerExit(time, customer, ExitType.SATISFIED));
+            case CustomEvent.ClockTick(int time) -> {
+                checkCutEnds(time);
+                busManager.post(new CustomEvent.AttemptHaircut(time));
+            }
+            case CustomEvent.AttemptHaircut(int time) -> attemptHaircut(time);
+            case null, default -> {
+                // no-op
+            }
         }
 
         if (!state.isShopOpen && shiftInfo.working().isEmpty()) {
