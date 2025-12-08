@@ -5,7 +5,7 @@ A native Android application for the barber shop simulation.
 _Note that the bonus Play/Pause feature and the ability to edit the timescale factor aren't implemented yet.
 The UI shows the Play/Pause button, but for now it only starts the simulation._
 
-# Screenshots
+# Screenshots & Video
 
 <table>
   <tr>
@@ -25,7 +25,10 @@ Legend:
   </td>
   </tr>
 </table>
-
+<details>
+  <summary>▶️ Expand to view screen recording</summary>
+  <video src="https://github.com/user-attachments/assets/c0d3fd11-816b-4894-85cd-1fa3712ab376" width="200"></video>
+</details>
 
 
 ## Setup
