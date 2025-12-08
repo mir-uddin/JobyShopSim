@@ -3,7 +3,7 @@
 A native Android application for the barber shop simulation.
 
 _Note that the bonus Play/Pause feature and the ability to edit the timescale factor aren't implemented yet.
-The UI shows the Play/Pause button but for now it only starts the simulation._
+The UI shows the Play/Pause button, but for now it only starts the simulation._
 
 # Screenshots
 
