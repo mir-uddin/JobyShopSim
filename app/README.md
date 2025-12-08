@@ -36,6 +36,8 @@ Legend:
 ./gradlew installDebug
 ```
 
+If you don't have java, you can install [the apk](https://github.com/mir-uddin/JobyShopSim/releases/tag/v2-UI-prerelease) directly on your android device/emulator.
+
 ## Project Structure
 
 ```
