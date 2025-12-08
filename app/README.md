@@ -38,6 +38,7 @@ Legend:
 ```bash
 ./gradlew installDebug
 ```
+You can edit the timescale factor in [`MainViewModel.TIMESCALE_FACTOR`](https://github.com/mir-uddin/JobyShopSim/blob/master/app/src/main/java/com/barbershopsim/app/MainViewModel.java#L22).
 
 If you don't have java, you can install [the apk](https://github.com/mir-uddin/JobyShopSim/releases/tag/v2-UI-prerelease) directly on your android device/emulator.
 
