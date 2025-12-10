@@ -21,10 +21,13 @@ jobs:
           distribution: temurin
           java-version: 23
 
-      - name: Compile all Java sources
-        run: |
-          mkdir -p out
-          javac -d out $(find simulation/src/main/java -name "*.java")
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x ./simulation/gradlew
 
-      - name: Run program
-        run: java -cp out com.barbershopsim.Main
+      - name: Build project with Gradle
+        working-directory: ./simulation
+        run: ./gradlew build --no-daemon
+
+      - name: Run application
+        working-directory: ./simulation
+        run: ./gradlew run --no-daemon
