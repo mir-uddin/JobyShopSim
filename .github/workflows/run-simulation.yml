@@ -1,0 +1,29 @@
+name: Run Simulation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 23
+
+      # - name: Grant execute permission for Gradle wrapper
+      #   run: chmod +x ./simulation/gradlew
+
+      - name: Run application
+        working-directory: ./
+        run: ./gradlew run --no-daemon
