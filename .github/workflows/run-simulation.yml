@@ -21,8 +21,10 @@ jobs:
           distribution: temurin
           java-version: 23
 
-      - name: Compile
-        run: javac simulation/src/main/java/com/barbershopsim/Main.java   # adjust this for your file structure
+      - name: Compile all Java sources
+        run: |
+          mkdir -p out
+          javac -d out $(find simulation/src/main/java -name "*.java")
 
       - name: Run program
-        run: java Main
+        run: java -cp out com.barbershopsim.Main
