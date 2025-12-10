@@ -1,0 +1,27 @@
+name: Run Simulation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 23
+
+      - name: Compile
+        run: javac simulation/src/main/java/com/barbershopsim/Main.java   # adjust this for your file structure
+
+      - name: Run program
+        run: java Main
