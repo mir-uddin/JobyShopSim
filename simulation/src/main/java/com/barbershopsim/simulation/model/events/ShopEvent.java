@@ -23,28 +23,28 @@ public interface ShopEvent extends Event {
     record ShiftStart(int time, Barber barber) implements ShopEvent {
         @Override
         public String toString() {
-            return formatTime(time) + barber.name + " started shift";
+            return formatTime(time) + barber.getName() + " started shift";
         }
     }
 
     record ShiftEnd(int time, Barber barber) implements ShopEvent {
         @Override
         public String toString() {
-            return formatTime(time) + barber.name + " ended shift";
+            return formatTime(time) + barber.getName() + " ended shift";
         }
     }
 
     record CutStart(int time, Barber barber, int customer) implements ShopEvent {
         @Override
         public String toString() {
-            return formatTime(time) + barber.name + " started cutting Customer-" + customer + "'s hair";
+            return formatTime(time) + barber.getName() + " started cutting Customer-" + customer + "'s hair";
         }
     }
 
     record CutEnd(int time, Barber barber, int customer) implements ShopEvent {
         @Override
         public String toString() {
-            return formatTime(time) + barber.name + " finished cutting Customer-" + customer + "'s hair";
+            return formatTime(time) + barber.getName() + " finished cutting Customer-" + customer + "'s hair";
         }
     }
 

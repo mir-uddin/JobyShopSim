@@ -10,9 +10,13 @@ public enum Barber {
     G("Grace"),
     H("Hector");
 
-    public final String name;
+    private final String name;
 
     Barber(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
