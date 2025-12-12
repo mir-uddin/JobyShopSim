@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.barbershopsim.app.databinding.FragmentMainBinding
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
     companion object {
@@ -63,30 +66,46 @@ class MainFragment : Fragment() {
         binding.shopName.text = viewModel.shopName
         binding.timescaleFactor.text = viewModel.timescaleFactor
 
-        viewModel.isShopOpen.observe(viewLifecycleOwner, Observer { isShopOpen ->
-            if (isShopOpen == true) {
-                binding.closedSign.visibility = View.INVISIBLE
-                binding.openSign.visibility = View.VISIBLE
-            } else {
-                binding.closedSign.visibility = View.VISIBLE
-                binding.openSign.visibility = View.INVISIBLE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.isShopOpen.collect { isShopOpen ->
+                        if (isShopOpen) {
+                            binding.closedSign.visibility = View.INVISIBLE
+                            binding.openSign.visibility = View.VISIBLE
+                        } else {
+                            binding.closedSign.visibility = View.VISIBLE
+                            binding.openSign.visibility = View.INVISIBLE
+                        }
+                    }
+                }
+                launch {
+                    viewModel.customerEnter.collect { customer ->
+                        customer?.let { binding.incomingCustomer.root.text = it.toString().padStart(2, '0') }
+                            ?: run { binding.incomingCustomer.root.text = "" }
+                    }
+                }
+                launch {
+                    viewModel.customerExit.collect { customer ->
+                        customer?.let { binding.outgoingCustomer.root.text = it.toString().padStart(2, '0') }
+                            ?: run { binding.outgoingCustomer.root.text = "" }
+                    }
+                }
+                launch {
+                    viewModel.waitingArea.collect(::updateWaitingArea)
+                }
+                launch {
+                    viewModel.haircutArea.collect(::updateBarberChairs)
+                }
+                launch {
+                    viewModel.clock.collect { time ->
+                        if (time.isNotEmpty()) {
+                            binding.clock.text = time
+                        }
+                    }
+                }
             }
-        })
-        viewModel.customerEnter.observe(viewLifecycleOwner, Observer { customer ->
-            customer?.let { binding.incomingCustomer.root.text = it.toString().padStart(2, '0') }
-                ?: run { binding.incomingCustomer.root.text = "" }
-        })
-        viewModel.customerExit.observe(viewLifecycleOwner, Observer { customer: Int? ->
-            customer?.let { binding.outgoingCustomer.root.text = it.toString().padStart(2, '0') }
-                ?: run { binding.outgoingCustomer.root.text = "" }
-        })
-        viewModel.waitingArea.observe(
-            viewLifecycleOwner, Observer(this::updateWaitingArea)
-        )
-        viewModel.haircutArea.observe(
-            viewLifecycleOwner, Observer(this::updateBarberChairs)
-        )
-        viewModel.clock.observe(viewLifecycleOwner, Observer { time -> binding.clock.text = time })
+        }
 
         binding.restartButton.setOnClickListener { viewModel.start() }
         binding.playPauseButton.setOnClickListener {
