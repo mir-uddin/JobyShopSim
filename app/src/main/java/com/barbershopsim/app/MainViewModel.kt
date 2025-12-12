@@ -20,7 +20,7 @@ class MainViewModel : ViewModel(), EventListener {
         get() = State.SHOP_NAME
 
     val timescaleFactor: String
-        get() = "1 real second =" + "%,d".format(TIMESCALE_FACTOR) + " simulated seconds"
+        get() = "1 real second = " + "%,d".format(TIMESCALE_FACTOR) + " simulated seconds"
 
     private val _isShopOpen = MutableStateFlow(false)
     val isShopOpen: StateFlow<Boolean> = _isShopOpen
